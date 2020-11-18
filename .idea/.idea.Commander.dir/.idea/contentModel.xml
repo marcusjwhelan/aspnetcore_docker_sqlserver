@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\marcus.whelan\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\marcus.whelan\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_.19.00" t="ExcludeRecursive" />
+    <e p="C:\Users\marcus.whelan\Example\Commander" t="IncludeRecursive">
+      <e p=".dockerignore" t="Include" />
+      <e p="1docker-compose.yml" t="Include" />
+      <e p="appsettings.Development.json" t="Include" />
+      <e p="appsettings.json" t="Include" />
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="Commander.csproj" t="IncludeRecursive" />
+      <e p="Controllers" t="Include">
+        <e p="CommandController.cs" t="Include" />
+      </e>
+      <e p="docker-compose.yml" t="Include" />
+      <e p="Dockerfile" t="Include" />
+      <e p="Dtos" t="Include">
+        <e p="CommandCreateDto.cs" t="Include" />
+        <e p="CommandReadDto.cs" t="Include" />
+      </e>
+      <e p="Migrations" t="Include">
+        <e p="20201117140848_InitialMigration.cs" t="Include" />
+        <e p="20201117140848_InitialMigration.Designer.cs" t="Include" />
+        <e p="CommanderContextModelSnapshot.cs" t="Include" />
+      </e>
+      <e p="Models" t="Include">
+        <e p="Command.cs" t="Include" />
+        <e p="PrepDB.cs" t="Include" />
+      </e>
+      <e p="obj" t="ExcludeRecursive">
+        <e p="Debug" t="Include">
+          <e p="netcoreapp3.1" t="Include">
+            <e p="Commander.AssemblyInfo.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Profiles" t="Include">
+        <e p="CommandsProfile.cs" t="Include" />
+      </e>
+      <e p="Program.cs" t="Include" />
+      <e p="Properties" t="Include">
+        <e p="launchSettings.json" t="Include" />
+      </e>
+      <e p="README.md" t="Include" />
+      <e p="Repository" t="Include">
+        <e p="CommanderContext.cs" t="Include" />
+        <e p="ICommanderRepo.cs" t="Include" />
+        <e p="MockCommanderRepo.cs" t="Include" />
+        <e p="SqlCommanderRepo.cs" t="Include" />
+      </e>
+      <e p="Startup.cs" t="Include" />
+    </e>
+  </component>
+</project>

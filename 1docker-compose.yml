@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: mssql_commander_dev_container
+    image: mcr.microsoft.com/mssql/server
+    restart: always
+    hostname: db
+    networks:
+      - aspdotnet_mysql_network
+    ports:
+      - 1433:1433
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: pa55w0rd!
+      MSSQL_PID: Express
+    volumes:
+      - mssql_data:/var/opt/mssql/data
+  api:
+    container_name: aspnet_commander_dev_container
+    hostname: api
+    build: .
+    networks:
+      - aspdotnet_mysql_network
+    ports:
+      - 5000:80
+      - 5001:443
+    environment:
+      DBServer: db
+      ASPNETCORE_URLS: https://+;http://+
+      ASPNETCORE_HTTPS_PORT: 5001
+      ASPNETCORE_ENVIRONMENT: Development
+    volumes:
+      - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/
+    depends_on:
+      - db
+networks:
+  aspdotnet_mysql_network:
+    driver: bridge
+volumes:
+  mssql_data:
+    driver: local
