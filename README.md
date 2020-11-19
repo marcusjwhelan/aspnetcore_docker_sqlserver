@@ -52,6 +52,31 @@ dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version
 ```
 Attach service in startup class.
 
+Getting Patch packages to do patches over http
+```bash
+dotnet add package Microsoft.AspNetCore.JsonPatch --version 3.1.9
+dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 3.1.9
+```
+To use the second package you need to do a little work in the startup class
+```c#
+// in ConfigureServices
+services.AddControllers();
+// to
+services.AddControllers().AddNewtonsoftJson(s =>
+            {
+                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
+```
+To actually do a patch the json send needs to look like
+```json
+[
+  {
+    "op": "replace",
+    "path": "/howto",
+    "value": "new value"
+  }
+]
+```
 
 # Docker setup
 #### Setting up Asp.Net Core with Docker

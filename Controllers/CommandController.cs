@@ -3,6 +3,7 @@ using AutoMapper;
 using Commander.Dtos;
 using Commander.Models;
 using Commander.Repository;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Commander.Controllers
@@ -74,6 +75,68 @@ namespace Commander.Controllers
                 commandReadDto
                 );
             // return Ok(commandReadDto);
+        }
+        
+        //PUT api/commands/{id}
+        [HttpPut("{id}")]
+        public ActionResult UpdateCommand(int id, CommandUpdateDto commandUpdateDto)
+        {
+            var commandModelFromRepo = _repository.GetCommandById(id);
+            if (commandModelFromRepo == null)
+            {
+                return NotFound();
+            }
+            // since both contain data we have to use this mapper
+            // maps update to command model
+            _mapper.Map(commandUpdateDto, commandModelFromRepo);
+            
+            // updates the reference from db context
+            _repository.UpdateCommand(commandModelFromRepo);
+            // flushes changes that were actually made, dont have to do the previous line but it does help if you change implementations you might need it
+            _repository.SaveChanges();
+            
+            return NoContent();
+        }
+        
+        //PATCH api/commands/{id}
+        [HttpPatch("{id}")]
+        public ActionResult PartialCommandUpdate(int id, JsonPatchDocument<CommandUpdateDto> patchDoc)
+        {
+            var commandModelFromRepo = _repository.GetCommandById(id);
+            if (commandModelFromRepo == null)
+            {
+                return NotFound();
+            }
+            // generate a new command update
+            var commandToPatch = _mapper.Map<CommandUpdateDto>(commandModelFromRepo);
+            
+            // Modelstate is from the installed package to make sure the model state is valid
+            patchDoc.ApplyTo(commandToPatch, ModelState);
+            // validate that its all good
+            if (!TryValidateModel(commandToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+            
+            // update the model data
+            _mapper.Map(commandToPatch, commandModelFromRepo);
+            _repository.UpdateCommand(commandModelFromRepo);
+            _repository.SaveChanges();
+            return NoContent();
+        }
+        
+        //DELETE api/commands/{id}
+        [HttpDelete("{id}")]
+        public ActionResult DeleteCommand(int id)
+        {
+            var commandModelFromRepo = _repository.GetCommandById(id);
+            if (commandModelFromRepo == null)
+            {
+                return NotFound();
+            }
+            _repository.DeleteCommand(commandModelFromRepo);
+            _repository.SaveChanges();
+            return NoContent();
         }
     }
 }

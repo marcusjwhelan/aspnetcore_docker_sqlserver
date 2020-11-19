@@ -6,6 +6,7 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Pa55w0rd!
+      - MSSQL_SA_PASSWORD=Pa55w0rd!
       - MSSQL_PID=Express
     ports:
       - 1433:1433
@@ -24,3 +25,13 @@ services:
     volumes:
       - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets
       - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/
+    working_dir: /app
+    entrypoint: [
+               './wait-for-it.sh',
+               'db:1433',
+               '-t',
+               '90',
+               '--',
+               'dotnet',
+               'Commander.dll',               
+    ]
