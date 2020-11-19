@@ -2,30 +2,53 @@ version: "3.8"
 
 services:
   db:
+    container_name: mssql_commander_dev_container
     image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    hostname: db
+    networks:
+      - aspdotnet_mysql_network
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Pa55w0rd!
       - MSSQL_SA_PASSWORD=Pa55w0rd!
       - MSSQL_PID=Express
     ports:
-      - 1433:1433
+      - target: 1433
+        published: 1433
+        protocol: tcp
+        mode: host
+    volumes:
+      - mssql_data:/var/opt/mssql
   api:
+    container_name: aspnet_commander_dev_container
+    restart: always
+    hostname: api
     build: .
+    networks:
+      - aspdotnet_mysql_network
     environment:
       - DBServer=db
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPS_PORT=5001
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - 5000:80
-      - 5001:443
+      - target: 80
+        published: 5000
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 5001
+        protocol: tcp
+        mode: host
     depends_on:
       - db
     volumes:
       - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets
       - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/
     working_dir: /app
+    stdin_open: true
+    tty: true
     entrypoint: [
                './wait-for-it.sh',
                'db:1433',
@@ -35,3 +58,9 @@ services:
                'dotnet',
                'Commander.dll',               
     ]
+networks:
+  aspdotnet_mysql_network:
+    driver: bridge
+volumes:
+  mssql_data:
+    driver: local
